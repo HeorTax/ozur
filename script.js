@@ -1,14 +1,20 @@
-// Butonları ve soruyu seçiyoruz
 const yesButton = document.getElementById('yesButton');
 const noButton = document.getElementById('noButton');
 const question = document.getElementById('question');
+const gifElement = document.querySelector('.gif'); // GIF elementini seçtik
 
-// "Evet" butonunun mevcut boyutlarını takip etmek için değişkenler
-let yesButtonSize = 1.2; // Yazı tipi boyutu (rem)
-let yesPaddingX = 30; // Yatay padding (px)
-let yesPaddingY = 15; // Dikey padding (px)
+// Başlangıç "Evet" butonunun CSS değerlerini alalım
+// Bu değerler style.css dosyasından gelmeli veya burada sabit tanımlanmalı
+let initialYesFontSize = 1.2; // rem
+let initialYesPaddingX = 30;  // px
+let initialYesPaddingY = 15;  // px
 
-// "Hayır" butonuna her basıldığında gösterilecek mesajlar
+// Büyüme faktörleri
+const growthFactorFontSize = 0.4; // Her tıklamada yazı tipi ne kadar büyüsün (rem)
+const growthFactorPaddingX = 20;  // Her tıklamada yatay dolgu ne kadar büyüsün (px)
+const growthFactorPaddingY = 10;  // Her tıklamada dikey dolgu ne kadar büyüsün (px)
+
+// "Hayır" butonuna basıldığında gösterilecek mesajlar
 const noMessages = [
     "Emin misin?",
     "Gerçekten mi?",
@@ -16,55 +22,48 @@ const noMessages = [
     "Son kararın mı?",
     "Bak çok üzülürüm...",
     "Hayır demeee",
-    "Peki, buna bas?" // Bu son mesaj olacak
+    "EVET'TEN BAŞKA ÇIKIŞIN YOK!" // Bu son mesaj olacak, Hayır butonu kaybolmadan hemen önce
 ];
 
-// "Hayır" butonuna kaç kez tıklandığını sayar
-let noClickCount = 0;
+let noClickCount = 0; // "Hayır" butonu tıklama sayacı
 
-// "Hayır" butonuna tıklandığında bu fonksiyon çalışacak
 noButton.addEventListener('click', () => {
     // "Hayır" butonunun yazısını değiştir
-    // (Dizideki mesaj sayısı biterse son mesajda kalır)
-    noButton.textContent = noMessages[noClickCount];
-    
-    // Mesaj dizisinin sonuna gelmediysek sayacı artır
     if (noClickCount < noMessages.length - 1) {
+        noButton.textContent = noMessages[noClickCount];
         noClickCount++;
+    } else {
+        // Son mesaja geldiysek, butonu gizle ve son metni göster
+        noButton.textContent = noMessages[noMessages.length - 1];
+        setTimeout(() => {
+            noButton.style.display = 'none';
+        }, 300); // 0.3 saniye sonra gizle ki son mesaj okunsun
+        question.textContent = "Barışmak zorundasın! 😉"; // Son aşamada soruyu değiştir
+        gifElement.src = "https://media.tenor.com/IfwLAk3N0CgAAAAi/quby-pentol.gif"; // Yine aynı tatlış gif olsun
     }
 
-    // "Evet" butonunun boyutlarını büyüt
-    yesButtonSize += 0.5; // Yazı tipini büyüt
-    yesPaddingX += 20;    // Genişliği artır
-    yesPaddingY += 10;    // Yüksekliği artır
+    // "Evet" butonunun boyutlarını artır
+    initialYesFontSize += growthFactorFontSize;
+    initialYesPaddingX += growthFactorPaddingX;
+    initialYesPaddingY += growthFactorPaddingY;
 
-    yesButton.style.fontSize = `${yesButtonSize}rem`;
-    yesButton.style.padding = `${yesPaddingY}px ${yesPaddingX}px`;
+    yesButton.style.fontSize = `${initialYesFontSize}rem`;
+    yesButton.style.padding = `${initialYesPaddingY}px ${initialYesPaddingX}px`;
 
-    // "Evet" butonu devasa olduğunda (6. tıklamadan sonra)
-    if (noClickCount === noMessages.length - 1) {
-        // "Hayır" butonunu gizle
-        noButton.style.display = 'none';
-        
-        // Soruyu değiştir ve "Evet" butonunu tüm ekranı kaplayacak hale getir
-        question.textContent = "EVET'TEN BAŞKA ŞANSIN YOK!";
-        
-        yesButton.style.position = 'fixed'; // Ekranı kaplaması için
-        yesButton.style.top = '0';
-        yesButton.style.left = '0';
-        yesButton.style.width = '100vw'; // Tüm ekran genişliği
-        yesButton.style.height = '100vh'; // Tüm ekran yüksekliği
-        yesButton.style.borderRadius = '0'; // Köşeleri düzelt
-    }
+    // Butonun ekrandan taşmaması için marginleri azaltabiliriz veya belirli bir büyüklükten sonra tam ekran yapabiliriz
+    // Şu anki mantık, son tıklamada "Hayır" butonu kaybolduktan sonra "Evet" butonunun son halini alması
+    // Bu, önceki isteğine göre son aşamada tam ekran olma durumunu biraz daha yumuşak yapıyor.
 });
 
-// "Evet" butonuna tıklandığında
 yesButton.addEventListener('click', () => {
-    // Soruyu ve gif'i değiştir
     question.textContent = "Barıştık! ❤️";
-    document.querySelector('.gif').src = "https://media.tenor.com/gK9s2UWFFjMAAAAi/peach-goma-kiss.gif";
+    gifElement.src = "https://media.tenor.com/gK9s2UWFFjMAAAAi/peach-goma-kiss.gif"; // Öpüşen GIF
     
     // Butonları gizle
     yesButton.style.display = 'none';
     noButton.style.display = 'none';
+    
+    // Konteyneri ortala ve sadece gif ile mesajı göster
+    document.querySelector('.container').style.justifyContent = 'center';
+    document.querySelector('.container').style.alignItems = 'center';
 });
