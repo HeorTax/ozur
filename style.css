@@ -1,0 +1,52 @@
+/* Sayfanın tamamını ortalar */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f8ff; /* Açık mavi arka plan */
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow: hidden; /* Buton ekrandan taşarsa kaydırma çubuğu çıkmasın */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gif {
+    height: 200px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.buttons {
+    display: flex;
+    gap: 20px; /* Butonlar arası boşluk */
+    margin-top: 20px;
+}
+
+button {
+    border: none;
+    border-radius: 10px;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Yumuşak geçiş efekti */
+}
+
+#yesButton {
+    background-color: #4CAF50; /* Yeşil */
+    color: white;
+}
+
+#noButton {
+    background-color: #f44336; /* Kırmızı */
+    color: white;
+}
